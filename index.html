@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Phone Menu</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap CSS -->
+  <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" /> -->
+
+  <!-- Bootstrap JS and Popper.js -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .menu-container {
+      width: 400px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-options button {
+      display: block;
+      width: 10%;
+      padding: 10px;
+      margin: 0px 0px 10px 0px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      background: rgb(37, 150, 190);
+    }
+
+
+    .close-button {}
+
+    .menu-options button:hover {
+      background: rgba(37, 149, 190, 0.793);
+    }
+
+    .dial-button {
+      background-color: #4caf50;
+      color: black;
+    }
+
+    .language-selection {
+      margin-top: 20px;
+    }
+
+    .language-selection button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .language-selection button:hover {
+      background-color: #0056b3;
+    }
+
+    .option-controls {
+      margin-top: 20px;
+    }
+
+    .option-controls button {
+      background-color: rgb(69, 173, 67, 1);
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .option-controls button:hover {
+      background-color: rgba(69, 173, 67, 0.805);
+    }
+
+    .backBtn {
+      background-color: white !important;
+      color: rgb(37, 150, 190);
+      border: 1px solid rgb(37, 150, 190) !important;
+    }
+
+    .backBtn:hover {
+      background-color: rgb(37, 150, 190) !important;
+      color: white;
+
+    }
+
+    .options {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      background: rgb(37, 150, 190);
+      position: relative;
+    }
+
+    .options:hover {
+      background: rgba(37, 149, 190, 0.877);
+    }
+
+
+    .cancel-btn {
+      right: -18px;
+      top: -12px;
+      left: 318px;
+      position: absolute;
+    }
+
+    .btn:hover {
+
+      border-color: transparent !important;
+    }
+
+    .d-none {
+      display: none;
+    }
+
+    /* Set a specific height and control overflow */
+    .menu-options {
+      padding: 10px;
+      max-height: 300px;
+      /* Set the maximum height for the menu */
+      overflow-y: auto;
+      /* Add a vertical scrollbar if content exceeds the height */
+      overflow-x: hidden;
+      /* Hide horizontal overflow */
+    }
+
+    /* Customize the scrollbar */
+    .menu-options::-webkit-scrollbar {
+      width: 5px;
+      /* Width of the scrollbar */
+    }
+
+    .menu-options::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      /* Background of the scrollbar track */
+    }
+
+    .menu-options::-webkit-scrollbar-thumb {
+      background: #198754;
+      /* Color of the scrollbar thumb */
+      border-radius: 5px;
+      /* Rounded corners for the thumb */
+    }
+
+    .menu-options::-webkit-scrollbar-thumb:hover {
+      background: #555;
+      /* Color when hovering over the scrollbar thumb */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="menu-container">
+    <div id="menu" class="menu-options">
+      <!-- Options will be dynamically inserted here -->
+    </div>
+    <div id="submenuPage" class="menu-options d-none">
+      <button class="backBtn" id="backToMenu">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="submenu-options" id="submenuContent">
+        <!-- Submenu options will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="button" class="btn btn-success m-auto mt-2" id="addOptionButton">
+        Add Option
+      </button>
+
+      <button type="button" class="btn btn-success m-auto mt-2 d-none" id="addDialButton">
+        Add Dial
+      </button>
+    </div>
+
+    <!-- Add Option Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Option</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Input fields for Menu, Sub Menu, Dial -->
+            <div class="col-12 gap-5 mt-3 option-input" id="menuField">
+              <label class="mb-1">Menu</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="menu" placeholder="Enter Menu" />
+              </div>
+            </div>
+            <div class="col-12 gap-5 mt-3 option-input" id="dialField">
+              <label class="mb-1" for="Dial">Dial</label>
+              <div class="row">
+                <div class="col-8">
+                  <input type="text" class="form-control" name="dial" id="Dial" placeholder="Enter Dial Number" />
+                </div>
+                <div class="col-4">
+                  <input type="text" class="form-control" name="dial-extension" placeholder="Extension (optional)" />
+                </div>
+              </div>
+            </div>
+            <div id="subMenuFields"></div>
+            <button type="button" class="btn btn-primary m-2" id="addSubMenuButton" onclick="addSubMenuField()">Add
+              Submenu</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveOption">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Option Modal End -->
+
+    <!-- Edit Option Modal -->
+    <div class="modal fade" id="exampleModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Option</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editOptionForm">
+              <input type="hidden" class="form-control" id="id" name="id" />
+              <div class="mb-3">
+                <label for="menuInput" class="form-label">Menu</label>
+                <input type="text" class="form-control" id="menuInput" name="menu" />
+              </div>
+              <div id="subMenuContainer"></div>
+              <button type="button" class="btn btn-secondary mb-3" id="addSubMenuEditButton"
+                onclick="addSubMenuField('')">Add Submenu</button>
+              <div class="mb-3">
+                <label for="dialInput" class="form-label">Dial</label>
+                <input type="text" class="form-control" id="dialInput" name="dial" />
+              </div>
+              <div class="mb-3">
+                <label for="dialExtensionInput" class="form-label">Dial Extension</label>
+                <input type="text" class="form-control" id="dialExtensionInput" name="dialExtension" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveEditOptionButton"
+              onclick="updateOption()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Option Modal End -->
+
+
+    <!-- Edit Modal End -->
+  </div>
+
+  <!-- Add Dial Modal -->
+  <!-- Add Dial Modal -->
+  <div id="addDialModal" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Add Dial to Submenu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="submenuId" />
+          <div class="mb-3">
+            <label for="dialNumber" class="form-label">Dial Number</label>
+            <input type="text" id="dialNumber" class="form-control" placeholder="Enter Dial Number" />
+          </div>
+          <div class="mb-3">
+            <label for="dialExtension" class="form-label">Dial Extension</label>
+            <input type="text" id="dialExtension" class="form-control" placeholder="Enter Dial Extension" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" id="saveDialButton" class="btn btn-primary">
+            Save Dial
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+      <div id="liveToast" class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+          <strong class="me-auto" id="toastTitle">Success</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage">Action was successful.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const menu = document.getElementById("menu");
+      const saveOptionButton = document.getElementById("saveOption");
+      const saveEditOptionButton = document.getElementById("saveEditOptionButton");
+      const deleteButtons = document.querySelectorAll(".delete-option");
+      const iconButton = document.querySelectorAll(".icon-button");
+      const menuField = document.getElementById("menuField");
+      const subMenuField = document.getElementById("subMenuField");
+      const dialField = document.getElementById("dialField");
+      const submenuPage = document.getElementById("submenuPage");
+      const backToMenuButton = document.getElementById("backToMenu");
+      const addDialButton = document.getElementById("addDialButton");
+      const addOptionButton = document.querySelector(".btn-success");
+
+      document.querySelectorAll(".submenu-options").forEach((submenuDiv) => {
+        submenuDiv.addEventListener("click", () => {
+          const submenuId = submenuDiv.getAttribute("data-id");
+          submenuIdInput.value = submenuId;
+
+          // Show the modal for adding a dial
+          const modal = new bootstrap.Modal(
+            document.getElementById("addDialModal")
+          );
+          modal.show();
+        });
+      });
+
+
+
+      const showToast = (title, message) => {
+        const toastTitle = document.getElementById("toastTitle");
+        const toastMessage = document.getElementById("toastMessage");
+
+        toastTitle.textContent = title;
+        toastMessage.textContent = message;
+
+        const toastElement = document.getElementById("liveToast");
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+      };
+
+      // Replace the existing showAlertAndCloseModal function with the new one
+      const showAlertModal = (modalId, message, title) => {
+        showToast(title || "Success", message);
+        const modalElement = document.getElementById(modalId);
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+        fetchOptions(); // Refresh the menu options
+      };
+
+      document.getElementById('addSubMenuButton').addEventListener('click', () => {
+        const subMenuGroups = document.querySelectorAll('.subMenuGroup');
+        addSubMenuField("", subMenuGroups.length);
+      });
+
+      // Function to populate existing submenu fields
+      function populateSubMenus(subMenus) {
+        debugger
+        console.log('populateSubMenus called with:', subMenus);
+
+        const subMenuContainer = document.getElementById("subMenuContainer");
+
+        if (!subMenuContainer) {
+          console.error("subMenuContainer element not found");
+          return;
+        }
+
+        // Clear existing fields
+        subMenuContainer.innerHTML = "";
+
+        // Add existing submenus
+        subMenus.forEach((menu, index) => {
+          const subMenuField = document.createElement("div");
+          subMenuField.classList.add("mb-3");
+
+          subMenuField.innerHTML = `
+      <label class="form-label">Sub Menu ${index + 1}</label>
+      <input
+          type="text"
+          class="form-control"
+          name="subMenus[${index}]"
+          id="subMenu${index}"
+          value="${menu}"
+      />
+      <button type="button" class="btn btn-danger mt-2" onclick="removeSubMenuField(this)">
+          Remove
+      </button>
+  `;
+
+
+
+          subMenuContainer.appendChild(subMenuField);
+        });
+      }
+
+      // const editModal = document.getElementById('exampleModalEdit');
+      // editModal.addEventListener('shown.bs.modal', function () {
+      //   populateSubMenus(existingSubMenus);
+      // });
+
+
+
+
+      // Add event listeners to radio buttons
+
+      const fetchOptions = async () => {
+        debugger;
+        const response = await fetch("http://localhost:5000/api/options");
+        const options = await response.json();
+        console.log(JSON.stringify(options));
+        renderOptions(options);
+      };
+
+      const renderOptions = (options) => {
+        const menu = document.getElementById("menu");
+        menu.innerHTML = "";
+
+        options.forEach((option) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.classList.add("d-flex", "options");
+          optionDiv.innerHTML = `
+          <div class="col-11 clicked-menu" data-id="${option.id}" data-dial="${option.dial || ""
+            }" data-extension="${option.extension || ""}">
+            ${option.menu}
+          </div>
+          <div class="col-1">
+            <a class="icon-button" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" onclick="openEditModel(this)" data-id="${option.id
+            }">
+              <img width="80%" src="https://cdn4.iconfinder.com/data/icons/symbol-blue-set-1/100/Untitled-2-92-256.png" alt="edit">
+            </a>
+            <div class="cancel-btn">
+              <a href="#" class="delete-option" data-id="${option.id}">
+                <img width="80%" src="https://cdn4.iconfinder.com/data/icons/controls-add-on-flat/48/Contols_-_Add_On-35-512.png" alt="Delete" class="icon">
+              </a>
+            </div>
+          </div>
+        `;
+          menu.appendChild(optionDiv);
+        });
+        const attachEventListeners = () => {
+          const deleteButtons = document.querySelectorAll(".delete-option");
+
+          deleteButtons.forEach((button) => {
+            button.addEventListener("click", (event) => {
+              event.preventDefault();
+              const optionId = button.getAttribute("data-id");
+
+              fetch(`http://localhost:5000/api/options/${optionId}`, {
+                method: "DELETE",
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("Failed to delete option");
+                  }
+
+                  // Check if the response body is empty
+                  return response.text().then((text) => {
+                    return text ? JSON.parse(text) : {}; // Return empty object if no content
+                  });
+                })
+                .then((data) => {
+                  showToast("Success", "Menu deleted successfully.");
+                  fetchOptions(); // Refresh the menu after deletion
+                })
+                .catch((error) => {
+                  console.error("Error deleting option:", error);
+                });
+            });
+          });
+        };
+
+
+        // Function to add submenu fields in the "Add Option" modal
+        function addSubMenuField() {
+          const subMenuFields = document.getElementById('subMenuFields');
+          const subMenuCount = subMenuFields.children.length + 1;
+
+          const subMenuHTML = `
+      <div class="col-12 gap-5 mt-3 option-input">
+        <label class="mb-1">Sub Menu ${subMenuCount}</label>
+        <input type="text" class="form-control" name="subMenu${subMenuCount}" placeholder="Enter Sub Menu" />
+      </div>`;
+
+          subMenuFields.insertAdjacentHTML('beforeend', subMenuHTML);
+        }
+
+
+
+        // Function to update labels after removing a submenu
+        function updateSubMenuLabels() {
+          const subMenuGroups = document.querySelectorAll('.subMenuGroup');
+          subMenuGroups.forEach((group, index) => {
+            const label = group.querySelector('label');
+            label.textContent = `Sub Menu ${index + 1}`;
+          });
+        }
+
+        // Add event listener to the '+' button
+        document.getElementById('addSubMenuButton').addEventListener('click', () => {
+          const subMenuGroups = document.querySelectorAll('.subMenuGroup');
+          addSubMenuField("", subMenuGroups.length);
+        });
+
+        // Initialize with one submenu field if needed
+        document.addEventListener('DOMContentLoaded', () => {
+          if (document.querySelectorAll('.subMenuGroup').length === 0) {
+            addSubMenuField("");
+          }
+        });
+
+        saveEditOptionButton.addEventListener("click", async () => {
+          const menuValue = document.getElementById("editMenuField").value.trim();
+          const dialValue = document.getElementById("editDialField").value.trim();
+          const dialExtensionValue = document.getElementById("editDialExtensionField").value.trim();
+
+          const subMenuInputs = document.querySelectorAll("#editSubMenuContainer .form-control");
+          const subMenuValues = Array.from(subMenuInputs)
+            .map((input) => input.value.trim())
+            .filter((value) => value);
+
+          const updatedOption = {
+            menu: menuValue,
+            subMenus: subMenuValues,
+            dial: dialValue,
+            dialExtension: dialExtensionValue,
+          };
+
+          try {
+            const response = await fetch(`http://localhost:5000/api/options/${currentEditOptionId}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedOption),
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to update option");
+            }
+
+            showToast("Success", "Option updated successfully.");
+            editModal.hide();
+            fetchOptions(); // Refresh the menu options
+          } catch (error) {
+            console.error("Error updating option:", error);
+          }
+        });
+
+
+        attachEventListeners();
+        // Attaching event listeners after rendering
+        menu.querySelectorAll(".clicked-menu").forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.preventDefault();
+            const id = button.getAttribute("data-id");
+            const dial = button.getAttribute("data-dial");
+            const extension = button.getAttribute("data-extension");
+
+            if (dial) {
+              const dialInfo = `${dial}${extension ? ` (${extension})` : ""}`;
+              alert(`Dialing at ${dialInfo}`);
+            } else {
+              // Code to show the submenu model
+              showSubmenu(id);
+            }
+          });
+        });
+      };
+
+      submenuPage.addEventListener("shown.bs.modal", function () {
+        addOptionButton.style.display = "none";
+        addDialButton.style.display = "block";
+      });
+
+      backToMenuButton.addEventListener("click", function () {
+        addOptionButton.style.display = "block";
+        addDialButton.style.display = "none";
+        submenuPage.classList.add("d-none");
+        document.getElementById("menu").classList.remove("d-none");
+      });
+
+      addDialButton.addEventListener("click", () => {
+        debugger;
+        const currentSubmenuId =
+          document.getElementById(".submenu-options").value;
+        if (currentSubmenuId) {
+          document.getElementById("submenuId").value = currentSubmenuId;
+          addDialModal.show();
+        } else {
+          console.error("subMenuField element not found");
+        }
+      });
+
+      // Function to initialize button visibility based on the current page
+      function initializePage() {
+        if (submenuPage.classList.contains("d-none")) {
+          // Show Add Option button and hide Add Dial button
+          addOptionButton.style.display = "block";
+          addDialButton.style.display = "none";
+        } else {
+          // Hide Add Option button and show Add Dial button
+          addOptionButton.style.display = "none";
+          addDialButton.style.display = "block";
+        }
+      }
+
+      initializePage();
+
+      backToMenuButton.addEventListener("click", () => {
+        // Hide submenu page and show menu
+        submenuPage.classList.add("d-none");
+        menu.classList.remove("d-none");
+        // Update button visibility
+        initializePage();
+      });
+      // Function to show submenu and update button visibility
+      function showSubmenu(id) {
+        fetch("http://localhost:5000/api/options")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((options) => {
+            const submenuContent = document.getElementById("submenuContent");
+
+            submenuContent.innerHTML = "";
+            const submenuItems = options.filter((option) => option.id === id);
+
+            if (submenuItems.length > 0) {
+              submenuItems.forEach((item) => {
+                const subMenus = item.subMenus || [];
+                subMenus.forEach((submenu, index) => {
+                  const container = document.createElement("div");
+                  container.className =
+                    "d-flex justify-content-between align-items-center my-2";
+                  const button = document.createElement("button");
+                  button.className = "btn btn-primary w-75";
+                  button.textContent = submenu;
+
+                  button.addEventListener("click", () => {
+                    alert(`You selected: ${submenu}`);
+                  });
+
+                  const deleteIcon = document.createElement("i");
+                  deleteIcon.className = "fa-solid fa-trash";
+                  deleteIcon.style.cursor = "pointer";
+                  deleteIcon.title = "Delete";
+
+                  deleteIcon.addEventListener("click", () => {
+                    fetch(
+                      `http://localhost:5000/api/submenus/${id}/${index}`,
+                      {
+                        method: "DELETE",
+                      }
+                    )
+                      .then((response) => {
+                        if (response.ok) {
+                          container.remove();
+                          showToast(
+                            "Success",
+                            "Deleted submenu successfully"
+                          );
+                        } else {
+                          throw new Error("Failed to delete submenu");
+                        }
+                      })
+                      .catch((error) =>
+                        console.error("Error deleting submenu:", error)
+                      );
+                  });
+
+                  container.appendChild(button);
+                  container.appendChild(deleteIcon);
+                  submenuContent.appendChild(container);
+                });
+
+                menu.classList.add("d-none");
+                submenuPage.classList.remove("d-none");
+                initializePage(); // Update button visibility when switching to submenu
+              });
+            } else {
+              alert("No submenus available for this option.");
+            }
+          })
+          .catch((error) => console.error("Error fetching options:", error));
+      }
+      // Function to show menu and update button visibility
+      function showMenu() {
+        debugger
+        submenuPage.classList.add("d-none");
+        menu.classList.remove("d-none");
+
+        // Update button visibility
+        addOptionButton.style.display = "block";
+        addDialButton.style.display = "none";
+      }
+
+      // Attach event listener to "Back" button
+      backToMenuButton.addEventListener("click", showMenu);
+
+
+
+      function fetchSubmenuData(submenuId) {
+        fetch(`http://localhost:5000/api/submenus/${submenuId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched submenu data:", data);
+            // Update your UI to show the submenu and its dials
+            // Example: Display submenu and dials
+            const submenuContainer =
+              document.getElementById("submenu-container");
+            submenuContainer.innerHTML = `
+            <h2>${data.subMenu}</h2>
+            <ul>
+              ${data.dials
+                .map((dial) => `<li>${dial.dial} (Ext: ${dial.dialExtension})</li>`)
+                .join("")}
+            </ul>
+          `;
+          })
+          .catch((error) =>
+            console.error("Error fetching submenu data:", error)
+          );
+      }
+
+
+      // Add delete option event listeners
+      const attachEventListeners = () => {
+        const deleteButtons = document.querySelectorAll(".delete-option");
+        deleteButtons.forEach((button) => {
+          button.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const id = button.getAttribute("data-id");
+            await deleteOption(id);
+            showToast("Success", "Delete Submenus Successfully");
+            fetchOptions();
+          });
+        });
+      };
+
+      // Global function definition
+
+      // Add event listeners to edit buttons
+      const editButtons = document.querySelectorAll(".icon-button");
+      editButtons.forEach((button) => {
+        debugger;
+        button.addEventListener("click", async (event) => {
+          event.preventDefault();
+          const id = button.getAttribute("data-id");
+          const option = options.find((opt) => opt.id == id);
+          console.log(option);
+
+          if (option) {
+            populateEditModal(option);
+          }
+        });
+      });
+
+      const addOption = async (option) => {
+        const response = await fetch("http://localhost:5000/api/options", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(option),
+        });
+        return await response.json();
+      };
+
+      // subMenuField.addEventListener("input", toggleFields);
+
+      // Add a new submenu field
+      function addSubMenuField(subMenu = "", index = 0, optionDiv = null) {
+        const container = document.getElementById("subMenuFields");
+
+        const subMenuDiv = document.createElement("div");
+        subMenuDiv.className = "subMenuGroup mb-3";
+        subMenuDiv.innerHTML = `
+        <label class="mb-1">Sub Menu ${index + 1}</label>
+        <input type="text" class="form-control subMenuInput" name="subMenus" placeholder="Enter Sub Menu" value="${subMenu}" />
+    `;
+        container.appendChild(subMenuDiv);
+
+        if (optionDiv && Array.isArray(optionDiv.subMenus)) {
+          container.innerHTML = '';
+          optionDiv.subMenus.forEach((subMenu, i) => {
+            const subMenuGroup = document.createElement("div");
+            subMenuGroup.classList.add("mb-3", "subMenuGroup");
+            subMenuGroup.innerHTML = `
+                <label class="form-label">Sub Menu ${1}</label>
+                <input type="text" class="form-control subMenuInput" name="subMenus" value="${subMenu}" />
+                <button type="button" class="btn btn-danger mt-2 removeSubMenuButton">Remove</button>
+            `;
+            container.appendChild(subMenuGroup);
+          });
+        } else {
+          console.error("`optionDiv` is not defined or `optionDiv.subMenus` is not an array.");
+        }
+      }
+
+
+
+
+
+      document.getElementById("addOptionButton").addEventListener("click", () => {
+        const choice = prompt("What would you like to add? Type 'dials' or 'submenu'.");
+        if (choice === null) {
+          return;
+        }
+
+        if (choice.toLowerCase() === "dials" || choice.toLowerCase() === "submenu") {
+          const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+          modal.show();
+
+          document.getElementById("dialField").classList.add("d-none");
+          document.getElementById("subMenuFields").classList.add("d-none");
+          document.getElementById("addSubMenuButton").classList.add("d-none");
+
+          if (choice.toLowerCase() === "dials") {
+            document.getElementById("dialField").classList.remove("d-none");
+          } else if (choice.toLowerCase() === "submenu") {
+            document.getElementById("subMenuFields").classList.remove("d-none");
+            document.getElementById("addSubMenuButton").classList.remove("d-none");
+          }
+        } else {
+          alert("Invalid choice. Please type 'dials' or 'submenu'.");
+        }
+      });
+
+
+
+      document.getElementById("saveOption").addEventListener("click", async () => {
+        const saveButton = document.getElementById("saveOption");
+
+        // Disable the save button to prevent multiple clicks
+        saveButton.disabled = true;
+
+        const menuValue = document.querySelector('[name="menu"]').value.trim();
+        const dialValue = document.querySelector('[name="dial"]').value.trim();
+        const dialExtensionValue = document.querySelector('[name="dial-extension"]').value.trim();
+
+        const subMenuInputs = document.querySelectorAll(".subMenuInput");
+        const subMenuValues = Array.from(subMenuInputs)
+          .map((input) => input.value.trim())
+          .filter((value) => value);
+
+        const newOption = {
+          id: Date.now().toString(),
+          menu: menuValue,
+          subMenus: subMenuValues,
+          dial: dialValue,
+          dialExtension: dialExtensionValue,
+        };
+
+        console.log("New Option Object:", newOption);
+
+        try {
+          await addOption(newOption);
+          fetchOptions();
+          showAlertModal("exampleModal", "Option saved successfully.", "Save");
+        } catch (error) {
+          console.error("Error saving option:", error);
+        } finally {
+          // Re-enable the save button after the operation is complete
+          saveButton.disabled = false;
+        }
+      });
+
+      function showAlertAndCloseModal(modalId, message, action) {
+        alert(message);
+        const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+        modal.hide();
+      }
+   
+      const deleteOption = async (id) => {
+        await fetch(`http://localhost:5000/api/options/${id}`, {
+          method: "DELETE",
+        });
+      };
+
+      const editOptionForm = async (id, option) => {
+        debugger;
+        await fetch(`http://localhost:5000/api/options/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(option),
+        });
+      };
+
+      // Populate edit modal with option data
+      const populateEditModal = (option) => {
+        debugger;
+        document.getElementById("editMenuName").value = option.menu || "";
+        document.getElementById("editSubMenuName").value =
+          option.subMenus || "";
+        document.getElementById("editDialNumber").value = option.dial || "";
+        document.getElementById("editDialExtension").value =
+          option.dialExtension || "";
+        document.getElementById("editOptionId").value = option.id;
+      };
+
+      // Save changes in the edit modal
+
+      fetchOptions();
+    });
+
+
+
+    async function updateOption() {
+      debugger
+      const id = document.getElementById("id").value;
+      const form = document.getElementById("editOptionForm");
+      const formData = new FormData(form);
+      const container = document.getElementById("subMenuContainer");
+      // Collect all sub-menu values
+      const subMenus = Array.from(
+        container.querySelectorAll('input[name^="subMenus"')
+      ).map((input) => input.value).filter(value => value !== "");
+
+      const data = {
+        menu: formData.get("menu"),
+        subMenus: subMenus,
+        dial: formData.get("dial"),
+        dialExtension: formData.get("dialExtension"),
+      };
+
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/options/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        if (response.ok) {
+          alert("Option updated successfully!");
+          const editModal = bootstrap.Modal.getInstance(
+            document.getElementById("exampleModalEdit")
+          );
+          editModal.hide();
+          fetchOptions();
+        } else {
+          console.error("Failed to update option:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error updating option:", error);
+      }
+    }
+
+    // Function to add a new submenu field
+
+    function addSubMenuField(subMenu = "", index = 0) {
+      const container = document.getElementById("subMenuFields");
+
+      const subMenuDiv = document.createElement("div");
+      subMenuDiv.className = "subMenuGroup mb-3";
+      subMenuDiv.innerHTML = `
+    <label class="mb-1">Sub Menu ${index + 1}</label>
+    <input type="text" class="form-control subMenuInput" name="subMenus" placeholder="Enter Sub Menu" value="${subMenu}" />
+
+  `;
+
+      container.appendChild(subMenuDiv);
+    }
+    // let existingSubMenus = []; // Define it globally or within the scope where you need it
+    // async function loadOptionData(optionId) {
+    //   try {
+    //     const response = await fetch(`http://localhost:5000/api/options/${optionId}`);
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! status: ${response.status}`);
+    //     }
+    //     const option = await response.json(); // Ensure `option` is defined here
+
+    //     // Verify that the option object is valid
+    //     if (option) {
+    //       populateForm(option);
+    //       populateSubMenus(option.subMenus || []);
+    //     } else {
+    //       console.error("No option data found");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error loading option data:", error);
+    //   }
+    // }
+    // Function to remove a submenu field
+    function removeSubMenuField(button) {
+      const subMenuContainer = document.getElementById("subMenuContainer");
+      if (subMenuContainer && button.parentElement) {
+        subMenuContainer.removeChild(button.parentElement);
+      }
+    }
+
+    async function openEditModel(button) {
+      const id = button.getAttribute("data-id");
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/options/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          populateEditModal(data);
+
+          // Show the modal after populating the data
+          const editModal = new bootstrap.Modal(document.getElementById("exampleModalEdit"));
+          editModal.show();
+        } else {
+          console.error("Failed to fetch data:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    function populateEditModal(data) {
+      debugger
+      document.getElementById("id").value = data.id;
+      document.getElementById("menuInput").value = data.menu;
+      document.getElementById("dialInput").value = data.dial || "";
+      document.getElementById("dialExtensionInput").value = data.dialExtension || "";
+
+      // Clear existing submenus
+      const subMenuContainer = document.getElementById("subMenuContainer");
+      subMenuContainer.innerHTML = "";
+
+      // Populate submenu fields if they exist
+      if (data.subMenus && data.subMenus.length > 0) {
+        data.subMenus.forEach((subMenu, index) => {
+          addSubMenuField(subMenu);
+        });
+      }
+    }
+
+    function addSubMenueditField(subMenu = "", index = 0) {
+      const container = document.getElementById("subMenuContainer"); // Ensure this ID matches the HTML element
+
+      const subMenuDiv = document.createElement("div");
+      subMenuDiv.className = "subMenuGroup mb-3";
+      subMenuDiv.innerHTML = `
+       <label class="form-label">Sub Menu</label>
+        <input type="text" class="form-control subMenuInput" name="subMenus[]" value="${subMenu}" />
+        <button type="button" class="btn btn-danger mt-2 removeSubMenuButton">Remove</button>
+      ;
+    `;
+
+      container.appendChild(subMenuDiv);
+
+      // Add event listener to the remove button
+      const removeButton = subMenuDiv.querySelector('.removeSubMenuButton');
+      removeButton.addEventListener('click', () => {
+        subMenuDiv.remove();
+        updateSubMenuLabels();
+      });
+    }
+
+
+    // Function to add submenu fields in the "Edit Option" modal
+    function addSubMenuField(submenudata) {
+      debugger
+      const subMenuContainer = document.getElementById('subMenuContainer');
+      const subMenuCount = subMenuContainer.children.length + 1;
+
+      const subMenuHTML = `
+      <div class="mb-3">
+        <label for="subMenuInput${subMenuCount}" class="form-label">Sub Menu ${subMenuCount}</label>
+        <input type="text" class="form-control" id="subMenuInput${subMenuCount}" name="subMenus" value="${submenudata}"  placeholder="Enter Sub Menu" />
+      </div>`;
+
+      subMenuContainer.insertAdjacentHTML('beforeend', subMenuHTML);
+    }
+
+
+
+  </script>
+</body>
+
+</html>
